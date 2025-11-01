@@ -5,7 +5,7 @@ function HeatMap() {
         <Map center={[43.6532, -79.3832]} className="h-full
   rounded-none">
             <MapTileLayer/>
-            <MapZoomControl/>
+            <MapZoomControl className="m-3"/>
             <MapMarker position={[43.6532, -79.3832]}>
                 <MapPopup>A map component for shadcn/ui.</MapPopup>
             </MapMarker>
