@@ -354,6 +354,7 @@ function MapMarker({
         <LeafletMarker
             icon={L.divIcon({
                 html: renderToString(icon),
+                className: "bg-none",
                 iconAnchor,
                 ...(bgPos ? { bgPos } : {}),
                 ...(popupAnchor ? { popupAnchor } : {}),
@@ -426,7 +427,9 @@ function MapPopup({
     return (
         <LeafletPopup
             className={cn(
-                "bg-none text-popover-foreground animate-in fade-out-0 fade-in-0 zoom-out-95 zoom-in-95 slide-in-from-bottom-2 z-50 w-72 rounded-md border font-sans shadow-md outline-hidden",
+                "bg-none text-popover-foreground animate-in fade-out-0 fade-in-0 zoom-out-95 zoom-in-95 slide-in-from-bottom-2 z-50 w-72 rounded-md font-sans shadow-md outline-hidden pb-3 border-0",
+                "[&_.leaflet-popup-content-wrapper]:!bg-popover [&_.leaflet-popup-tip]:!bg-popover [&_.leaflet-popup-content-wrapper]:!text-foreground"
+                ,
                 className
             )}
             {...props} />
