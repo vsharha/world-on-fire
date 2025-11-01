@@ -1,6 +1,10 @@
+import Link from "next/link";
+
 function Logo() {
     return (
-        <div>World on Fire</div>
+        <Link href="/">
+            <h1 className="font-bold text-2xl p-2">World on Fire</h1>
+        </Link>
     );
 }
 

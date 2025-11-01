@@ -23,12 +23,12 @@ const ubuntu = Ubuntu({
 export default async function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className={`${ubuntu.variable}`}>
-      <body>
-        <Providers>
-            <Header/>
-            {children}
-        </Providers>
-      </body>
+        <body className="min-h-screen-dynamic h-screen-dynamic flex flex-col">
+            <Providers>
+                <Header/>
+                {children}
+            </Providers>
+        </body>
     </html>
   );
 }
