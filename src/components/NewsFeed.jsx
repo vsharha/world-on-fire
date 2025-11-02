@@ -10,6 +10,10 @@ function NewsFeed() {
     const {error, isLoading, newsFeed} = useNewsFeed();
     console.log(newsFeed);
 
+    const averageSentiment = newsFeed.reduce((acc, current) => {
+        acc += current.sentiment;
+    }, 0) / newsFeed.length;
+
     if (isLoading || error || !newsFeed) return null;
 
     return (
@@ -20,7 +24,7 @@ function NewsFeed() {
                         <span>
                             Recent news
                         </span>
-                        <Blinker/>
+                        <Blinker sentiment={averageSentiment}/>
                     </div>
                 }
                 className="mb-0"
