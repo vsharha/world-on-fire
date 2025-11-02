@@ -3,7 +3,6 @@ import useNews from "@/hooks/useNews";
 
 function NewsList({location}) {
     const {news} = useNews(location)
-    console.log(location, news);
 
     return (
         <div className="max-h-100 overflow-y-auto">

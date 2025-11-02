@@ -6,7 +6,6 @@ async function fetchHeatmap() {
     } catch (e) {
         throw new Error("Could not parse error response");
     }
-    console.log(data);
     return data;
 }
 
@@ -18,7 +17,6 @@ async function fetchNews(location) {
     } catch (e) {
         throw new Error("Could not parse error response");
     }
-    console.log(data);
     return data;
 }
 

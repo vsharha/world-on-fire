@@ -1,7 +1,7 @@
 "use client"
 
 import {Map, MapLocateControl, MapMarker, MapPopup, MapTileLayer, MapZoomControl} from "@/components/ui/map";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import IntensityMarker from "@/components/IntensityMarker";
 import useGeolocation from "@/hooks/useGeolocation";
 import NewsList from "@/components/NewsList";
@@ -15,7 +15,16 @@ function HeatMap() {
 
     const {error, isLoading, heatmap} = useHeatmap();
 
+    console.log(heatmap)
+
     useGeolocation(setMapKey, setCenter)
+
+    // Rerender map when heatmap data loads
+    useEffect(() => {
+        if (heatmap && !isLoading) {
+            setMapKey(prev => prev + 1);
+        }
+    }, [heatmap, isLoading]);
 
     return (
         <Map key={mapKey} center={center} className="h-full rounded-none" zoom="6">
@@ -56,13 +65,13 @@ function HeatMap() {
                 <div className="absolute bottom-4 left-4 bg-card backdrop-blur-sm rounded-lg shadow-lg px-2 py-1.5 flex items-center gap-2 z-[1000]">
                     {isLoading && (
                         <>
-                            <Loading />
+                            <Loading size={20}/>
                             <span className="text-sm font-medium">Loading...</span>
                         </>
                     )}
                     {error && !isLoading && (
                         <>
-                            <LucideX className="w-5 h-5" />
+                            <LucideX className="w-5 h-5" size={20}/>
                             <span className="text-sm">{error.message || 'An error occurred'}</span>
                         </>
                     )}
