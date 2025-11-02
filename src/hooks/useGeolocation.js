@@ -1,5 +1,4 @@
-import {useEffect, useState} from "react";
-import useGeocoding from "@/hooks/useGeocoding";
+import {useEffect} from "react";
 
 function useGeolocation(setMapKey, setCenter) {
     useEffect(() => {
