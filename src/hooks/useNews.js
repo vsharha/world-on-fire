@@ -9,7 +9,7 @@ function useNews(city) {
         staleTime: 0,
     })
 
-    return {...query, assignments: query.data}
+    return {...query, news: query.data}
 }
 
 export default useNews

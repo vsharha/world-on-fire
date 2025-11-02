@@ -1,9 +1,8 @@
-import {cityNews} from "@/data/data";
 import LocationArticle from "@/components/LocationArticle";
+import useNews from "@/hooks/useNews";
 
 function NewsList({location}) {
-    // const news = useNews(location)
-    const news = cityNews[location];
+    const {news} = useNews(location)
     console.log(location, news);
 
     return (

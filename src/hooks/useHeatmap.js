@@ -9,7 +9,7 @@ function useHeatmap() {
         staleTime: 0,
     })
 
-    return {...query, assignments: query.data}
+    return {...query, heat_map: query.data}
 }
 
 export default useHeatmap

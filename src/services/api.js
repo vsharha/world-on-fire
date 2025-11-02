@@ -1,9 +1,25 @@
 async function fetchHeatmap() {
-    return heatmap
+    const response = await fetch(`${process.env.NEXT_PUBLIC_FASTAPI_URL}/news/heatmap`);
+    let data;
+    try {
+        data = await response.json();
+    } catch (e) {
+        throw new Error("Could not parse error response");
+    }
+    console.log(data);
+    return data;
 }
 
-async function fetchNews(city) {
-
+async function fetchNews(location) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_FASTAPI_URL}/news/search?location=${location}`);
+    let data;
+    try {
+        data = await response.json();
+    } catch (e) {
+        throw new Error("Could not parse error response");
+    }
+    console.log(data);
+    return data;
 }
 
 

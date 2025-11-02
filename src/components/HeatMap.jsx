@@ -2,16 +2,17 @@
 
 import {Map, MapLocateControl, MapMarker, MapPopup, MapTileLayer, MapZoomControl} from "@/components/ui/map";
 import { useState } from "react";
-import heatmap from "@/data/data";
 import IntensityMarker from "@/components/IntensityMarker";
 import useGeocoding from "@/hooks/useGeocoding";
 import useGeolocation from "@/hooks/useGeolocation";
 import NewsList from "@/components/NewsList";
+import useHeatmap from "@/hooks/useHeatmap";
 
 function HeatMap() {
     const [center, setCenter] = useState([55.922797194822806, -3.1745191247766957 ]);
     const [mapKey, setMapKey] = useState(0);
 
+    const {heatmap} = useHeatmap();
     const locationCoords = useGeocoding(heatmap)
 
     useGeolocation(setMapKey, setCenter)
