@@ -3,15 +3,20 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-      <main>
-          <section className="relative flex flex-col items-center justify-center w-full gap-5 min-h-120 bg-none overflow-hidden rounded-lg">
-              <div className="absolute inset-0 bg-[url('/bg.png')] bg-cover bg-center filter blur-xl -z-10" />
-              <h1 className="text-3xl font-bold text-center">See what's going on in the world, right now.</h1>
-              <h2 className="text-xl">Get a new perspective on life.</h2>
-              <Link href="/map">
-                <Button className="text-xl">Go to map</Button>
-              </Link>
-          </section>
+      <main className="flex-1 flex flex-col">
+          <div className="flex-1">
+              <section className="relative flex flex-col items-center justify-center w-full gap-5 min-h-120 bg-none overflow-hidden rounded-lg">
+                  <div className="absolute inset-0 bg-[url('/bg.png')] bg-cover bg-center filter blur-xl -z-10" />
+                  <h1 className="text-3xl font-bold text-center">See what&apos;s going on in the world, right now.</h1>
+                  <h2 className="text-xl">Get a new perspective on life.</h2>
+                  <Link href="/map">
+                    <Button className="text-xl">Go to map</Button>
+                  </Link>
+              </section>
+          </div>
+          <footer className="py-4 text-center text-sm text-muted-foreground">
+              <div>© {new Date().getFullYear()} World on Fire. All rights reserved.</div>
+          </footer>
       </main>
   );
 }
