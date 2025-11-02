@@ -1,6 +1,6 @@
 function IntensityMarker({ intensity }) {
     // Size: 20px to 60px based on intensity
-    const size = 20 + (intensity * 40);
+    const size = 20 + (Math.max(intensity, 1.5) * 40);
 
     // Get CSS variable for color
     const getColorVar = () => {
