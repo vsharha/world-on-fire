@@ -1,14 +1,23 @@
 function IntensityMarker({ intensity, showBlur = true }) {
     // Size: 20px to 60px based on intensity
-    const blurSize = 20 + (Math.min(intensity, 1.5) * 40);
+    const blurSize = 20 + (Math.min(Math.max(Math.abs(intensity), 0.5), 1.5) * 40);
 
     // Get CSS variable for color
     const getColorVar = () => {
-        if (intensity >= 0.8) return "--color-chart-5"; // Dark red (extreme)
-        if (intensity >= 0.6) return "--color-chart-4"; // Red (critical)
-        if (intensity >= 0.4) return "--color-chart-3"; // Orange (high)
-        if (intensity >= 0.2) return "--color-chart-2"; // Yellow (medium)
-        return "--color-chart-1"; // Green (low)
+        // Zero/neutral intensity
+        if (intensity === 0 || (intensity > -0.1 && intensity < 0.1)) {
+            return "--color-chart-3"; // Neutral
+        }
+
+        // Positive intensity
+        if (intensity > 0) {
+            if (intensity > 0.5) return "--color-chart-5"; // Very positive
+            return "--color-chart-4"; // Somewhat positive
+        }
+
+        // Negative intensity
+        if (intensity < -0.5) return "--color-chart-1"; // Very negative
+        return "--color-chart-2"; // Somewhat negative
     };
 
     // If showBlur is false, return only the white dot (for clickable marker)
