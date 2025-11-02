@@ -3,31 +3,27 @@ import Link from "next/link";
 import {ArrowUpRight} from "lucide-react";
 import Truncate from "@/components/Truncate";
 import {formatTimestamp, getSentimentColor} from "@/lib/utils";
+import Blinker from "@/components/Blinker";
 
 function Article({article}) {
     const {image_url, title, description, url, created_at, sentiment} = article;
 
     const color = getSentimentColor(sentiment)
 
+    if(!image_url) return null;
+
     return (
         <div className="flex flex-col sm:flex-row gap-3">
             <div className="w-full sm:w-1/3 flex flex-col gap-2">
                 <StyledImage src={image_url} alt="" className="rounded-md w-full"/>
-                <div className="flex flex-row justify-between items-center">
-                    <span className="text-xs">Sentiment</span>
-                    <div
-                        className="w-2 h-2 aspect-square rounded-full pr-1"
-                        style={{
-                            backgroundColor: color,
-                        }}
-                    >
-                    </div>
+                <div className="flex flex-row justify-between items-center gap-0.5">
+                    {created_at && (
+                        <span className="text-xs text-muted-foreground mt-1 block">
+                            {formatTimestamp(created_at)}
+                        </span>
+                    )}
+                    <Blinker sentiment={sentiment} />
                 </div>
-                {created_at && (
-                    <span className="text-xs text-muted-foreground mt-1 block">
-                        {formatTimestamp(created_at)}
-                    </span>
-                )}
             </div>
             <div className="flex-1 flex flex-col gap-1 text-sm">
                 <h1 className="font-bold">{title}</h1>

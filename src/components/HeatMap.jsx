@@ -61,7 +61,7 @@ function HeatMap() {
                             iconAnchor={[4, 4]}
                         >
                             <MapPopup>
-                                <ArticleList location={location} />
+                                <ArticleList location={location} intensity={intensity} />
                             </MapPopup>
                         </MapMarker>
                     </React.Fragment>

@@ -1,7 +1,7 @@
 "use client"
 
 import useNewsFeed from "@/hooks/useNewsFeed";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {Card, CardContent} from "@/components/ui/card";
 import StyledCollapsible from "@/components/StyledCollapsible";
 import Article from "@/components/Article";
 import Blinker from "@/components/Blinker";
@@ -11,9 +11,11 @@ function NewsFeed({className, defaultOpen=false}) {
     const {error, isLoading, newsFeed} = useNewsFeed();
     console.log(newsFeed);
 
-    const averageSentiment = newsFeed?newsFeed.reduce((acc, current) => {
-        acc += current.sentiment;
-    }, 0) / newsFeed.length:0;
+    const averageSentiment = (() => {
+        if (!newsFeed || newsFeed.length === 0) return 0;
+        const sum = newsFeed.reduce((acc, current) => acc + (Number(current?.sentiment) || 0), 0);
+        return sum / newsFeed.length;
+    })();
 
     if (isLoading || error || !newsFeed) return null;
 

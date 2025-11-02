@@ -6,7 +6,7 @@ function useNewsFeed() {
         queryKey: ["news_feed"],
         queryFn: fetchNewsFeed,
         refetchOnWindowFocus: true,
-        refetchInterval: 15 * 1000,
+        refetchInterval: 30 * 1000,
         staleTime: 0,
     })
 
