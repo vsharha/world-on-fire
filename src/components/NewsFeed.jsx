@@ -3,7 +3,7 @@
 import useNewsFeed from "@/hooks/useNewsFeed";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import StyledCollapsible from "@/components/StyledCollapsible";
-import LocationArticle from "@/components/LocationArticle";
+import Article from "@/components/Article";
 import Blinker from "@/components/Blinker";
 
 function NewsFeed() {
@@ -28,7 +28,7 @@ function NewsFeed() {
             >
                 <CardContent className="max-h-100 overflow-y-auto mt-3 flex flex-col gap-3">
                     {newsFeed.map((article, index) => (
-                        <LocationArticle article={article} key={index} />
+                        <Article article={article} key={index} />
                     ))}
                 </CardContent>
             </StyledCollapsible>

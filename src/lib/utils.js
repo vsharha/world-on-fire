@@ -38,3 +38,26 @@ export function formatTimestamp(timestamp) {
     });
   }
 }
+
+export function getSentimentColor(intensity) {
+    let variable;
+
+    if (intensity === 0 || (intensity > -0.1 && intensity < 0.1)) {
+        // Zero/neutral intensity
+        variable = "--color-chart-3"; // Neutral
+    } else if (intensity > 0) {
+        // Positive intensity
+        if (intensity > 0.5) {
+            variable = "--color-chart-5"; // Very positive
+        } else {
+            variable = "--color-chart-4"; // Somewhat positive
+        }
+    } else if (intensity < -0.5) {
+        // Negative intensity
+        variable = "--color-chart-1";
+    } else {
+        variable =  "--color-chart-2"; // Somewhat negative
+    }
+
+    return `var(${variable})`
+}

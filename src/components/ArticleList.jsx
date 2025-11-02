@@ -1,4 +1,4 @@
-import LocationArticle from "@/components/LocationArticle";
+import Article from "@/components/Article";
 import useArticles from "@/hooks/useArticles";
 import Loading from "@/components/Loading";
 
@@ -30,7 +30,7 @@ function ArticleList({location}) {
             </div>
             <div className="flex flex-col gap-3">
                 {news?.map((article, index) =>
-                    <LocationArticle article={article} key={index} />
+                    <Article article={article} key={index} />
                 )}
             </div>
         </div>
