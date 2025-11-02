@@ -15,8 +15,6 @@ function HeatMap() {
 
     const {error, isLoading, heatmap} = useHeatmap();
 
-    console.log(heatmap)
-
     useGeolocation(setMapKey, setCenter)
 
     // Rerender map when heatmap data loads
