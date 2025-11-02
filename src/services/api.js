@@ -9,7 +9,7 @@ async function fetchHeatmap() {
     return data;
 }
 
-async function fetchNews(location) {
+async function fetchArticles(location) {
     const response = await fetch(`${process.env.NEXT_PUBLIC_FASTAPI_URL}/news/search?location=${location}`);
     let data;
     try {
@@ -41,4 +41,4 @@ async function geocodeLocation(locationName) {
     }
 }
 
-export { fetchHeatmap, fetchNews, geocodeLocation };
+export { fetchHeatmap, fetchArticles, geocodeLocation };

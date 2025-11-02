@@ -4,7 +4,7 @@ import {Map, MapLocateControl, MapMarker, MapPopup, MapTileLayer, MapZoomControl
 import { useState, useEffect } from "react";
 import IntensityMarker from "@/components/IntensityMarker";
 import useGeolocation from "@/hooks/useGeolocation";
-import NewsList from "@/components/NewsList";
+import ArticleList from "@/components/ArticleList";
 import useHeatmap from "@/hooks/useHeatmap";
 import Loading from "@/components/Loading";
 import {LucideX} from "lucide-react";
@@ -53,7 +53,7 @@ function HeatMap() {
                         iconAnchor={iconAnchor}
                     >
                         <MapPopup>
-                            <NewsList location={location} />
+                            <ArticleList location={location} />
                         </MapPopup>
                     </MapMarker>
                 );

@@ -1,9 +1,9 @@
 import LocationArticle from "@/components/LocationArticle";
-import useNews from "@/hooks/useNews";
+import useArticles from "@/hooks/useArticles";
 import Loading from "@/components/Loading";
 
-function NewsList({location}) {
-    const {error, isLoading, news} = useNews(location)
+function ArticleList({location}) {
+    const {error, isLoading, news} = useArticles(location)
     console.log(news)
 
     if (isLoading) {
@@ -37,4 +37,4 @@ function NewsList({location}) {
     );
 }
 
-export default NewsList;
+export default ArticleList;
