@@ -43,7 +43,7 @@ function HeatMap() {
                 if (!coordinates) return null;
 
                 // Blur overlay size
-                const blurSize = 20 + (intensity * 40);
+                const blurSize = 20 + (Math.min(intensity, 1.5) * 40);
 
                 return (
                     <React.Fragment key={index}>

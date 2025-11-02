@@ -1,7 +1,6 @@
 function IntensityMarker({ intensity, showBlur = true }) {
     // Size: 20px to 60px based on intensity
-    const blurSize = 20 + (Math.max(intensity, 1.5) * 40);
-    const dotSize = 12; // White dot size
+    const blurSize = 20 + (Math.min(intensity, 1.5) * 40);
 
     // Get CSS variable for color
     const getColorVar = () => {

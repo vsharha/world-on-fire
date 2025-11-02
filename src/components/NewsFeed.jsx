@@ -24,6 +24,7 @@ function NewsFeed() {
                     </div>
                 }
                 className="mb-0"
+                defaultOpen={false}
             >
                 <CardContent className="max-h-100 overflow-y-auto mt-3 flex flex-col gap-3">
                     {newsFeed.map((article, index) => (
