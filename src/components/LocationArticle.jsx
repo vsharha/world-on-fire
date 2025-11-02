@@ -11,8 +11,8 @@ function LocationArticle({article}) {
             <div className="flex flex-col gap-1">
                 <h1 className="font-bold">{title}</h1>
                 <span className="text-muted-foreground">{description}</span>
-                <Link href={link} className="flex gap-1 items-center">
-                    View <ArrowUpRight size={15}/>
+                <Link href={link} className="flex gap-1 items-center text-xs border-b-1 border-link text-link w-fit" target="_blank">
+                    View <ArrowUpRight size={12}/>
                 </Link>
             </div>
         </div>

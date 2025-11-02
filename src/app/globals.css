@@ -133,18 +133,24 @@
     --shadow: oklch(0 0 0 / 0.15);
     --passed: oklch(0.65 0.18 140);
     --failed: oklch(0.65 0.18 27);
+
+    --link: oklch(0.55 0.20 250);
 }
 
 .dark {
     --shadow: oklch(0 0 0 / 0.6);
     --passed: oklch(0.85 0.18 140);
     --failed: oklch(0.85 0.18 27);
+
+    --link: oklch(0.75 0.18 250);
 }
 
 @theme {
     --color-shadow: var(--shadow);
     --color-passed: var(--passed);
     --color-failed: var(--failed);
+
+    --color-link: var(--link);
 
     --spacing-screen-dynamic: 100dvh;
     --spacing-content: 100rem;

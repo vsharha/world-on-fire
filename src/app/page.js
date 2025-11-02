@@ -5,9 +5,9 @@ export default function Home() {
   return (
       <main>
           <section className="flex flex-col items-center justify-center w-full gap-5 bg-card p-10">
-              <h1 className="text-xl">See what's going on in the world, right now.</h1>
+              <h1 className="text-3xl font-bold">See what's going on in the world, right now.</h1>
               <Link href="/map">
-                <Button>Go to map</Button>
+                <Button className="text-xl">Go to map</Button>
               </Link>
           </section>
       </main>
