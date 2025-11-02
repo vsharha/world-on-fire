@@ -2,6 +2,7 @@
 
 import {Map, MapLocateControl, MapMarker, MapPopup, MapTileLayer, MapZoomControl} from "@/components/ui/map";
 import { useState, useEffect } from "react";
+import React from "react";
 import IntensityMarker from "@/components/IntensityMarker";
 import useGeolocation from "@/hooks/useGeolocation";
 import ArticleList from "@/components/ArticleList";
@@ -41,21 +42,29 @@ function HeatMap() {
             {heatmap && heatmap.map(({location, coordinates, intensity}, index) => {
                 if (!coordinates) return null;
 
-                // Calculate marker size for proper centering
-                const markerSize = 20 + (intensity * 40);
-                const iconAnchor = [markerSize / 2, markerSize / 2];
+                // Blur overlay size
+                const blurSize = 20 + (intensity * 40);
 
                 return (
-                    <MapMarker
-                        key={index}
-                        position={coordinates}
-                        icon={<IntensityMarker intensity={intensity} />}
-                        iconAnchor={iconAnchor}
-                    >
-                        <MapPopup>
-                            <ArticleList location={location} />
-                        </MapPopup>
-                    </MapMarker>
+                    <React.Fragment key={index}>
+                        {/* Non-clickable blur overlay */}
+                        <MapMarker
+                            position={coordinates}
+                            icon={<IntensityMarker intensity={intensity} showBlur={true} />}
+                            iconAnchor={[blurSize / 2, blurSize / 2]}
+                            interactive={false}
+                        />
+                        {/* Clickable white dot */}
+                        <MapMarker
+                            position={coordinates}
+                            icon={<IntensityMarker intensity={intensity} showBlur={false} />}
+                            iconAnchor={[4, 4]}
+                        >
+                            <MapPopup>
+                                <ArticleList location={location} />
+                            </MapPopup>
+                        </MapMarker>
+                    </React.Fragment>
                 );
             })}
 
