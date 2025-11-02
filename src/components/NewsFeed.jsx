@@ -2,19 +2,30 @@
 
 import useNewsFeed from "@/hooks/useNewsFeed";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import Loading from "@/components/Loading";
 import StyledCollapsible from "@/components/StyledCollapsible";
 import LocationArticle from "@/components/LocationArticle";
+import Blinker from "@/components/Blinker";
 
 function NewsFeed() {
     const {error, isLoading, newsFeed} = useNewsFeed();
+    console.log(newsFeed);
 
-    if (isLoading || error || newsFeed) return null;
+    if (isLoading || error || !newsFeed) return null;
 
     return (
         <Card className="w-96 p-2">
-            <StyledCollapsible title="Recent news" className="mb-0">
-                <CardContent>
+            <StyledCollapsible
+                title={
+                    <div className="flex flex-row justify-between items-center w-full gap-1">
+                        <span>
+                            Recent news
+                        </span>
+                        <Blinker/>
+                    </div>
+                }
+                className="mb-0"
+            >
+                <CardContent className="max-h-100 overflow-y-auto mt-3 flex flex-col gap-3">
                     {newsFeed.map((article, index) => (
                         <LocationArticle article={article} key={index} />
                     ))}

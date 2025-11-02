@@ -8,7 +8,6 @@ import ArticleList from "@/components/ArticleList";
 import useHeatmap from "@/hooks/useHeatmap";
 import Loading from "@/components/Loading";
 import {LucideX} from "lucide-react";
-import NewsFeed from "@/components/NewsFeed";
 
 function HeatMap() {
     const [center, setCenter] = useState([55.922797194822806, -3.1745191247766957 ]);
