@@ -10,9 +10,9 @@ function NewsFeed() {
     const {error, isLoading, newsFeed} = useNewsFeed();
     console.log(newsFeed);
 
-    const averageSentiment = newsFeed.reduce((acc, current) => {
+    const averageSentiment = newsFeed?newsFeed.reduce((acc, current) => {
         acc += current.sentiment;
-    }, 0) / newsFeed.length;
+    }, 0) / newsFeed.length:0;
 
     if (isLoading || error || !newsFeed) return null;
 
