@@ -10,8 +10,8 @@ function Article({article}) {
     const color = getSentimentColor(sentiment)
 
     return (
-        <div className="flex flex-row gap-3">
-            <div className="w-1/3 flex flex-col gap-2">
+        <div className="flex flex-col sm:flex-row gap-3">
+            <div className="w-full sm:w-1/3 flex flex-col gap-2">
                 <StyledImage src={image_url} alt="" className="rounded-md w-full"/>
                 <div className="flex flex-row justify-between items-center">
                     <span className="text-xs">Sentiment</span>

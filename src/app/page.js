@@ -1,5 +1,6 @@
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
+import NewsFeed from "@/components/NewsFeed";
 
 export default function Home() {
   return (
@@ -13,6 +14,9 @@ export default function Home() {
                     <Button className="text-xl">Go to map</Button>
                   </Link>
               </section>
+              <div className="w-full flex items-center justify-center">
+                <NewsFeed className="w-full max-w-150 mt-3" defaultOpen={true}/>
+              </div>
           </div>
           <footer className="py-4 text-center text-sm text-muted-foreground">
               <div>© {new Date().getFullYear()} World on Fire. All rights reserved.</div>
