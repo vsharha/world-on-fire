@@ -26,7 +26,7 @@ function HeatMap() {
     }, [heatmap, isLoading]);
 
     return (
-        <Map key={mapKey} center={center} className="h-full rounded-none" zoom="6">
+        <Map key={mapKey} center={center} className="h-full rounded-none" zoom="6" minZoom="2">
             <MapTileLayer/>
             <MapZoomControl className="m-3"/>
             <MapLocateControl
@@ -69,7 +69,7 @@ function HeatMap() {
             })}
 
             {(isLoading || error) && (
-                <div className="absolute bottom-4 left-4 bg-card backdrop-blur-sm rounded-lg shadow-lg px-2 py-1.5 flex items-center gap-2 z-[1000]">
+                <div className="absolute bottom-4 left-4 bg-card backdrop-blur-sm rounded-lg shadow-lg px-4 py-3 flex items-center gap-2 z-[1000]">
                     {isLoading && (
                         <>
                             <Loading size={20}/>
