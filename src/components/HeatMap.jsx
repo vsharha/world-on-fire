@@ -1,11 +1,12 @@
 "use client"
 
 import {Map, MapLocateControl, MapMarker, MapPopup, MapTileLayer, MapZoomControl} from "@/components/ui/map";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import heatmap from "@/data/data";
 import IntensityMarker from "@/components/IntensityMarker";
 import useGeocoding from "@/hooks/useGeocoding";
 import useGeolocation from "@/hooks/useGeolocation";
+import NewsList from "@/components/NewsList";
 
 function HeatMap() {
     const [center, setCenter] = useState([55.922797194822806, -3.1745191247766957 ]);
@@ -45,8 +46,7 @@ function HeatMap() {
                         iconAnchor={iconAnchor}
                     >
                         <MapPopup>
-                            <div className="font-semibold">{location}</div>
-                            <div className="text-sm">Intensity: {(intensity * 100).toFixed(0)}%</div>
+                            <NewsList location={location} />
                         </MapPopup>
                     </MapMarker>
                 );

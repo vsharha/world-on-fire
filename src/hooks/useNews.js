@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import {fetchHeatmap} from "@/services/api";
 
-function useHeatmap(news) {
+function useNews(city) {
     const query = useQuery({
         queryKey: ["news"],
-        queryFn: async () => fetchHeatmap(news),
+        queryFn: async () => fetchHeatmap(city),
         refetchOnWindowFocus: true,
         staleTime: 0,
     })
@@ -12,4 +12,4 @@ function useHeatmap(news) {
     return {...query, assignments: query.data}
 }
 
-export default useHeatmap
+export default useNews
