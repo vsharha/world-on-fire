@@ -1,7 +1,7 @@
 import Image from "next/image";
 import {twMerge} from "tailwind-merge";
 
-function StyledImage({aspectRatio="16/9", src, alt, className, ...props}) {
+function StyledImage({src, alt, className, ...props}) {
   return (
     <Image
       src={src}
@@ -10,7 +10,6 @@ function StyledImage({aspectRatio="16/9", src, alt, className, ...props}) {
       height="0"
       sizes="100vw"
       className={twMerge("w-full h-fit bg-background border-1 border-border", className)}
-      style={{aspectRatio:aspectRatio}}
       draggable={false}
       {...props}
     />
