@@ -23,7 +23,7 @@ function NewsFeed({className, defaultOpen=false}) {
         <Card className={cn("w-fit p-0", className)}>
             <StyledCollapsible
                 title={
-                    <div className="flex flex-row justify-between items-center w-full gap-3">
+                    <div className="flex flex-row justify-between items-center w-full gap-3 h-fit">
                         <span>
                             Recent news
                         </span>

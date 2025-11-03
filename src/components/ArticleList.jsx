@@ -24,7 +24,7 @@ function ArticleList({location, intensity}) {
     }
 
     return (
-        <div className="max-h-100 overflow-y-auto p-4 w-full">
+        <div className="max-h-100 overflow-y-auto p-4 w-full" key={intensity}>
             <div className="flex flex-col gap-0 pb-3">
                 <div className="flex flex-row gap-1 justify-between items-center">
                     <h1 className="text-lg font-bold mb-2">{location}</h1>
