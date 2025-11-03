@@ -9,7 +9,6 @@ import {cn} from "@/lib/utils";
 
 function NewsFeed({className, defaultOpen=false}) {
     const {error, isLoading, newsFeed} = useNewsFeed();
-    console.log(newsFeed);
 
     const averageSentiment = (() => {
         if (!newsFeed || newsFeed.length === 0) return 0;

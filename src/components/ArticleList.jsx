@@ -5,7 +5,6 @@ import Blinker from "@/components/Blinker";
 
 function ArticleList({location, intensity}) {
     const {error, isLoading, news} = useArticles(location)
-    console.log(news)
 
     if (isLoading) {
         return (
