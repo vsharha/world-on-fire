@@ -60,7 +60,7 @@ function HeatMap() {
                             icon={<IntensityMarker intensity={intensity} showBlur={false} />}
                             iconAnchor={[4, 4]}
                         >
-                            <MapPopup>
+                            <MapPopup className="max-w-[calc(100vw*9/10)]">
                                 <ArticleList location={location} intensity={intensity} />
                             </MapPopup>
                         </MapMarker>
@@ -73,7 +73,7 @@ function HeatMap() {
                     {isLoading && (
                         <>
                             <Loading size={20}/>
-                            <span className="text-sm font-medium">Loading...</span>
+                            <span className="hidden sm:block text-sm font-medium">Loading...</span>
                         </>
                     )}
                     {error && !isLoading && (
