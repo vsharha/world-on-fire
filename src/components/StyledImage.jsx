@@ -6,6 +6,7 @@ function StyledImage({src, alt, className, ...props}) {
     <Image
       src={src}
       alt={alt}
+      key={src}
       width="0"
       height="0"
       sizes="100vw"

@@ -60,7 +60,7 @@ function HeatMap() {
                             icon={<IntensityMarker intensity={intensity} showBlur={false} />}
                             iconAnchor={[4, 4]}
                         >
-                            <MapPopup className="max-w-[calc(100vw*9/10)]">
+                            <MapPopup key={location} className="max-w-[calc(100vw*9/10)]">
                                 <ArticleList location={location} intensity={intensity} />
                             </MapPopup>
                         </MapMarker>

@@ -8,8 +8,6 @@ import Blinker from "@/components/Blinker";
 function Article({article}) {
     const {image_url, title, description, url, created_at, sentiment} = article;
 
-    const color = getSentimentColor(sentiment)
-
     if(!image_url) return null;
 
     return (
@@ -27,7 +25,7 @@ function Article({article}) {
             </div>
             <div className="flex-1 flex flex-col gap-1 text-sm">
                 <h1 className="font-bold">{title}</h1>
-                <Truncate className="text-muted-foreground">{description}</Truncate>
+                <Truncate className="text-muted-foreground text-justify">{description}</Truncate>
                 {url && <Link href={url} className="flex gap-1 items-center border-b-1 border-link text-link w-fit"
                        target="_blank">
                     View <ArrowUpRight size={12}/>
