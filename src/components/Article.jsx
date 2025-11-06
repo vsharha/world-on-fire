@@ -6,7 +6,7 @@ import {formatTimestamp, getSentimentColor} from "@/lib/utils";
 import Blinker from "@/components/Blinker";
 
 function Article({article}) {
-    const {image_url, title, description, url, created_at, sentiment} = article;
+    const {image_url, title, description, url, published_at, sentiment} = article;
 
     if(!image_url) return null;
 
@@ -15,9 +15,9 @@ function Article({article}) {
             <div className="w-full sm:w-1/3 flex flex-col gap-2">
                 <StyledImage src={image_url} alt="" className="rounded-md w-full"/>
                 <div className="flex flex-row justify-between items-center gap-0.5">
-                    {created_at && (
+                    {published_at && (
                         <span className="text-xs text-muted-foreground mt-1 block">
-                            {formatTimestamp(created_at)}
+                            {formatTimestamp(published_at)}
                         </span>
                     )}
                     <Blinker sentiment={sentiment} />
