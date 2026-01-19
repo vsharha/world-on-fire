@@ -18,7 +18,7 @@ import Loading from "@/components/Loading";
 import { LucideX } from "lucide-react";
 
 function HeatMap() {
-  const [center, setCenter] = useState([
+  const [center, setCenter] = useState<[number, number]>([
     55.922797194822806, -3.1745191247766957,
   ]);
   const [mapKey, setMapKey] = useState(0);
@@ -39,8 +39,8 @@ function HeatMap() {
       key={mapKey}
       center={center}
       className="h-full rounded-none"
-      zoom="6"
-      minZoom="2"
+      zoom={6}
+      minZoom={2}
     >
       <MapTileLayer />
       <MapZoomControl className="m-3" />

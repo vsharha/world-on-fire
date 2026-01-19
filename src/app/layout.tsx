@@ -2,8 +2,9 @@ import "@/app/globals.css";
 import { Ubuntu } from "next/font/google";
 import Header from "@/components/Header";
 import Providers from "@/components/Providers";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "World on Fire",
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
@@ -19,7 +20,11 @@ const ubuntu = Ubuntu({
   display: "swap",
 });
 
-export default async function RootLayout({ children }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" suppressHydrationWarning className={`${ubuntu.variable}`}>
       <body className="min-h-screen-dynamic h-screen-dynamic flex flex-col">

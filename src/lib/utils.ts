@@ -1,21 +1,16 @@
-import { clsx } from "clsx";
+import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-export function cn(...inputs) {
+export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/**
- * Formats a timestamp into a human-readable relative time string
- * @param {string|Date} timestamp - The timestamp to format
- * @returns {string} A human-readable time string (e.g., "2 hours ago", "just now")
- */
-export function formatTimestamp(timestamp) {
+export function formatTimestamp(timestamp: string | Date) {
   if (!timestamp) return "";
 
   const date = new Date(timestamp);
   const now = new Date();
-  const diffInMs = now - date;
+  const diffInMs = now.getTime() - date.getTime();
   const diffInSeconds = Math.floor(diffInMs / 1000);
   const diffInMinutes = Math.floor(diffInSeconds / 60);
   const diffInHours = Math.floor(diffInMinutes / 60);
@@ -39,7 +34,7 @@ export function formatTimestamp(timestamp) {
   }
 }
 
-export function getSentimentColor(intensity) {
+export function getSentimentColor(intensity: number) {
   let variable;
 
   if (intensity === 0 || (intensity > -0.1 && intensity < 0.1)) {

@@ -1,14 +1,18 @@
-import { ThemeProvider as NextThemesProvider } from "next-themes";
-import * as React from "react";
+"use client";
 
-function ThemeProvider({ children }) {
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+
+interface ThemeProviderProps {
+  children: React.ReactNode;
+}
+
+function ThemeProvider({ children }: ThemeProviderProps) {
   return (
     <NextThemesProvider
       attribute="class"
       defaultTheme="system"
       enableSystem
       disableTransitionOnChange
-      className="h-full"
     >
       {children}
     </NextThemesProvider>

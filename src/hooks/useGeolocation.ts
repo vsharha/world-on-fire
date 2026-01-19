@@ -1,6 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, type Dispatch, type SetStateAction } from "react";
 
-function useGeolocation(setMapKey, setCenter) {
+function useGeolocation(
+  setMapKey: Dispatch<SetStateAction<number>>,
+  setCenter: Dispatch<SetStateAction<[number, number]>>,
+) {
   useEffect(() => {
     // Get user's location on mount
     if (navigator.geolocation) {

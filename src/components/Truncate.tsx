@@ -1,10 +1,18 @@
+"use client";
+
 import _ from "lodash";
 import { useState } from "react";
 
-function Truncate({ length = 100, children }) {
+interface TruncateProps {
+  length?: number;
+  children: React.ReactNode;
+  className?: string;
+}
+
+function Truncate({ length = 100, children, className }: TruncateProps) {
   const [open, setOpen] = useState(false);
 
-  function truncate(text) {
+  function truncate(text: string) {
     if (open) return text;
     return _.truncate(text, { length });
   }
@@ -14,7 +22,7 @@ function Truncate({ length = 100, children }) {
   }
 
   return (
-    <p>
+    <p className={className}>
       {truncate(children)}
       {children.length > length && (
         <span

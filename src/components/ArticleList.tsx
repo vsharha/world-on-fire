@@ -3,7 +3,12 @@ import useArticles from "@/hooks/useArticles";
 import Loading from "@/components/Loading";
 import Blinker from "@/components/Blinker";
 
-function ArticleList({ location, intensity }) {
+interface ArticleListProps {
+  location: string;
+  intensity: number;
+}
+
+function ArticleList({ location, intensity }: ArticleListProps) {
   const { error, isLoading, news } = useArticles(location);
 
   if (isLoading) {

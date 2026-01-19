@@ -1,6 +1,10 @@
 import { getSentimentColor } from "@/lib/utils";
 
-function Blinker({ sentiment }) {
+interface BlinkerProps {
+  sentiment: number;
+}
+
+function Blinker({ sentiment }: BlinkerProps) {
   const color = getSentimentColor(sentiment);
 
   return (

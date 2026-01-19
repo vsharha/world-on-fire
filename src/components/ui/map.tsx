@@ -161,9 +161,9 @@ interface MapTileLayerOption {
   attribution?: string;
 }
 
-interface MapLayerGroupOption
-  extends Pick<React.ComponentProps<typeof CheckboxItem>, "disabled"> {
+interface MapLayerGroupOption {
   name: string;
+  disabled?: boolean | undefined;
 }
 
 interface MapLayersContextType {
@@ -335,11 +335,12 @@ function MapLayers({
 
     // Set initial selected tile layer
     if (tileLayers.length > 0 && !selectedTileLayer) {
+      const firstLayer = tileLayers[0];
       const validDefaultValue =
         defaultTileLayer &&
         tileLayers.some((layer) => layer.name === defaultTileLayer)
           ? defaultTileLayer
-          : tileLayers[0].name;
+          : firstLayer?.name ?? "";
       setSelectedTileLayer(validDefaultValue);
     }
 
@@ -466,7 +467,7 @@ function MapLayersControl({
               <DropdownMenuCheckboxItem
                 key={layerGroup.name}
                 checked={activeLayerGroups.includes(layerGroup.name)}
-                disabled={layerGroup.disabled}
+                disabled={layerGroup.disabled ?? false}
                 onCheckedChange={(checked) =>
                   handleLayerGroupToggle(layerGroup.name, checked)
                 }

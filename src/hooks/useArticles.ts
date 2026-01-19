@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchHeatmap, fetchArticles } from "@/services/api";
+import { fetchArticles } from "@/services/api";
 
-function useArticles(location) {
+function useArticles(location: string) {
   const query = useQuery({
     queryKey: ["news"],
     queryFn: async () => fetchArticles(location),

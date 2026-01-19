@@ -1,4 +1,6 @@
-async function fetchHeatmap() {
+import type { Article, HeatmapPoint } from "@/types";
+
+export async function fetchHeatmap(): Promise<HeatmapPoint[]> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_FASTAPI_URL}/news/heatmap`,
   );
@@ -11,7 +13,7 @@ async function fetchHeatmap() {
   return data;
 }
 
-async function fetchArticles(location) {
+export async function fetchArticles(location: string): Promise<Article[]> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_FASTAPI_URL}/news/search?location=${location}`,
   );
@@ -24,7 +26,7 @@ async function fetchArticles(location) {
   return data;
 }
 
-async function fetchNewsFeed() {
+export async function fetchNewsFeed(): Promise<Article[]> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_FASTAPI_URL}/news/latest`,
   );
@@ -36,5 +38,3 @@ async function fetchNewsFeed() {
   }
   return data;
 }
-
-export { fetchHeatmap, fetchArticles, fetchNewsFeed };

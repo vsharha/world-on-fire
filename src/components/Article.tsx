@@ -2,10 +2,15 @@ import StyledImage from "@/components/StyledImage";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import Truncate from "@/components/Truncate";
-import { formatTimestamp, getSentimentColor } from "@/lib/utils";
+import { formatTimestamp } from "@/lib/utils";
 import Blinker from "@/components/Blinker";
+import type { Article as ArticleType } from "@/types";
 
-function Article({ article }) {
+interface ArticleProps {
+  article: ArticleType;
+}
+
+function Article({ article }: ArticleProps) {
   const { image_url, title, description, url, published_at, sentiment } =
     article;
 

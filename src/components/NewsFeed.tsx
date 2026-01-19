@@ -7,7 +7,12 @@ import Article from "@/components/Article";
 import Blinker from "@/components/Blinker";
 import { cn } from "@/lib/utils";
 
-function NewsFeed({ className, defaultOpen = false }) {
+interface NewsFeedProps {
+  className?: string;
+  defaultOpen?: boolean;
+}
+
+function NewsFeed({ className, defaultOpen = false }: NewsFeedProps) {
   const { error, isLoading, newsFeed } = useNewsFeed();
 
   const averageSentiment = (() => {

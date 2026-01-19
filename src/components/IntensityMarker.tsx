@@ -1,6 +1,11 @@
 import { getSentimentColor } from "@/lib/utils";
 
-function IntensityMarker({ intensity, showBlur = true }) {
+interface IntensityMarkerProps {
+  intensity: number;
+  showBlur?: boolean;
+}
+
+function IntensityMarker({ intensity, showBlur = true }: IntensityMarkerProps) {
   // Size: 20px to 60px based on intensity
   const blurSize = 20 + Math.min(Math.max(Math.abs(intensity), 0.5), 1.5) * 40;
 

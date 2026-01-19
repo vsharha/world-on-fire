@@ -1,7 +1,11 @@
-import Image from "next/image";
+import Image, { type ImageProps } from "next/image";
 import { twMerge } from "tailwind-merge";
 
-function StyledImage({ src, alt, className, ...props }) {
+interface StyledImageProps extends Omit<ImageProps, "width" | "height"> {
+  className?: string;
+}
+
+function StyledImage({ src, alt, className, ...props }: StyledImageProps) {
   return (
     <div
       className={twMerge(
@@ -12,7 +16,7 @@ function StyledImage({ src, alt, className, ...props }) {
       <Image
         src={src}
         alt={alt}
-        key={src}
+        key={String(src)}
         width="0"
         height="0"
         sizes="100vw"

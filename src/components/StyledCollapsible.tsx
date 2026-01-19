@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Collapsible,
   CollapsibleContent,
@@ -8,7 +10,19 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-function StyledCollapsible({ title, children, defaultOpen = true, className }) {
+interface StyledCollapsibleProps {
+  title: React.ReactNode;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+  className?: string;
+}
+
+function StyledCollapsible({
+  title,
+  children,
+  defaultOpen = true,
+  className,
+}: StyledCollapsibleProps) {
   const [open, setOpen] = useState(defaultOpen);
 
   return (
