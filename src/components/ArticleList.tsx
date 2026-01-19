@@ -9,20 +9,12 @@ interface ArticleListProps {
 }
 
 function ArticleList({ location, intensity }: ArticleListProps) {
-  const { error, isLoading, news } = useArticles(location);
+  const { news } = useArticles(location);
 
-  if (isLoading) {
+  if (news === undefined) {
     return (
       <div className="flex items-center justify-center py-8">
         <Loading />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="py-4">
-        Error loading news: {error.message || "An error occurred"}
       </div>
     );
   }

@@ -13,7 +13,7 @@ interface NewsFeedProps {
 }
 
 function NewsFeed({ className, defaultOpen = false }: NewsFeedProps) {
-  const { error, isLoading, newsFeed } = useNewsFeed();
+  const { newsFeed } = useNewsFeed();
 
   const averageSentiment = (() => {
     if (!newsFeed || newsFeed.length === 0) return 0;
@@ -24,7 +24,7 @@ function NewsFeed({ className, defaultOpen = false }: NewsFeedProps) {
     return sum / newsFeed.length;
   })();
 
-  if (isLoading || error || !newsFeed) return null;
+  if (newsFeed === undefined || !newsFeed) return null;
 
   return (
     <Card className={cn("w-fit p-0", className)}>

@@ -15,7 +15,6 @@ import useGeolocation from "@/hooks/useGeolocation";
 import ArticleList from "@/components/ArticleList";
 import useHeatmap from "@/hooks/useHeatmap";
 import Loading from "@/components/Loading";
-import { LucideX } from "lucide-react";
 
 function HeatMap() {
   const [center, setCenter] = useState<[number, number]>([
@@ -23,16 +22,16 @@ function HeatMap() {
   ]);
   const [mapKey, setMapKey] = useState(0);
 
-  const { error, isLoading, heatmap } = useHeatmap();
+  const { heatmap } = useHeatmap();
 
   useGeolocation(setMapKey, setCenter);
 
   // Rerender map when heatmap data loads
   useEffect(() => {
-    if (heatmap && !isLoading) {
+    if (heatmap !== undefined) {
       setMapKey((prev) => prev + 1);
     }
-  }, [heatmap, isLoading]);
+  }, [heatmap]);
 
   return (
     <Map
@@ -87,24 +86,12 @@ function HeatMap() {
           );
         })}
 
-      {(isLoading || error) && (
+      {heatmap === undefined && (
         <div className="absolute bottom-4 left-4 bg-card backdrop-blur-sm rounded-lg shadow-lg px-4 py-3 flex items-center gap-2 z-[1000]">
-          {isLoading && (
-            <>
-              <Loading size={20} />
-              <span className="hidden sm:block text-sm font-medium">
-                Loading...
-              </span>
-            </>
-          )}
-          {error && !isLoading && (
-            <>
-              <LucideX className="w-5 h-5" size={20} />
-              <span className="text-sm">
-                {error.message || "An error occurred"}
-              </span>
-            </>
-          )}
+          <Loading size={20} />
+          <span className="hidden sm:block text-sm font-medium">
+            Loading...
+          </span>
         </div>
       )}
     </Map>

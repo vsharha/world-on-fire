@@ -1,16 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchNewsFeed } from "@/services/api";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 
 function useNewsFeed() {
-  const query = useQuery({
-    queryKey: ["news_feed"],
-    queryFn: fetchNewsFeed,
-    refetchOnWindowFocus: true,
-    refetchInterval: 30 * 1000,
-    staleTime: 0,
-  });
-
-  return { ...query, newsFeed: query.data };
+  const newsFeed = useQuery(api.news.getLatestNews);
+  return { newsFeed };
 }
 
 export default useNewsFeed;
