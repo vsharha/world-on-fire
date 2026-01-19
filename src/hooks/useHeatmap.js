@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import {fetchHeatmap} from "@/services/api";
+import { fetchHeatmap } from "@/services/api";
 
 function useHeatmap() {
-    const query = useQuery({
-        queryKey: ["heatmap"],
-        queryFn: fetchHeatmap,
-        refetchOnWindowFocus: true,
-        staleTime: 0,
-    })
+  const query = useQuery({
+    queryKey: ["heatmap"],
+    queryFn: fetchHeatmap,
+    refetchOnWindowFocus: true,
+    staleTime: 0,
+  });
 
-    return {...query, heatmap: query.data}
+  return { ...query, heatmap: query.data };
 }
 
-export default useHeatmap
+export default useHeatmap;

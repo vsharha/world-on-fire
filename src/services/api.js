@@ -1,34 +1,40 @@
 async function fetchHeatmap() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_FASTAPI_URL}/news/heatmap`);
-    let data;
-    try {
-        data = await response.json();
-    } catch (e) {
-        throw new Error("Could not parse error response");
-    }
-    return data;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_FASTAPI_URL}/news/heatmap`,
+  );
+  let data;
+  try {
+    data = await response.json();
+  } catch (e) {
+    throw new Error("Could not parse error response");
+  }
+  return data;
 }
 
 async function fetchArticles(location) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_FASTAPI_URL}/news/search?location=${location}`);
-    let data;
-    try {
-        data = await response.json();
-    } catch (e) {
-        throw new Error("Could not parse error response");
-    }
-    return data;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_FASTAPI_URL}/news/search?location=${location}`,
+  );
+  let data;
+  try {
+    data = await response.json();
+  } catch (e) {
+    throw new Error("Could not parse error response");
+  }
+  return data;
 }
 
 async function fetchNewsFeed() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_FASTAPI_URL}/news/latest`);
-    let data;
-    try {
-        data = await response.json();
-    } catch (e) {
-        throw new Error("Could not parse error response");
-    }
-    return data;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_FASTAPI_URL}/news/latest`,
+  );
+  let data;
+  try {
+    data = await response.json();
+  } catch (e) {
+    throw new Error("Could not parse error response");
+  }
+  return data;
 }
 
 export { fetchHeatmap, fetchArticles, fetchNewsFeed };
