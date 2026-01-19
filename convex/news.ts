@@ -1,16 +1,27 @@
 import { v } from "convex/values";
 import { query, internalMutation } from "./_generated/server";
+import type { Doc } from "./_generated/dataModel";
+
+type News = Doc<"news">;
+type LocationCache = Doc<"locationCache">;
 
 export const getLatestNews = query({
   args: {},
-  handler: async (ctx) => {
+  handler: async (ctx): Promise<Array<{
+    image_url: string;
+    title: string;
+    description: string;
+    url: string;
+    published_at: string;
+    sentiment: number;
+  }>> => {
     const news = await ctx.db
       .query("news")
       .withIndex("by_published_at")
       .order("desc")
       .take(100);
 
-    return news.map((article) => ({
+    return news.map((article: News) => ({
       image_url: article.imageUrl ?? "",
       title: article.title,
       description: article.description ?? "",
@@ -30,13 +41,13 @@ export const searchByLocation = query({
       .order("desc")
       .collect();
 
-    const filtered = news.filter((article) =>
+    const filtered = news.filter((article: News) =>
       article.locations.some(
-        (loc) => loc.toLowerCase() === args.location.toLowerCase()
+        (loc: string) => loc.toLowerCase() === args.location.toLowerCase()
       )
     );
 
-    return filtered.slice(0, 50).map((article) => ({
+    return filtered.slice(0, 50).map((article: News) => ({
       image_url: article.imageUrl ?? "",
       title: article.title,
       description: article.description ?? "",
@@ -57,8 +68,8 @@ export const getHeatmap = query({
       .take(500);
 
     const locationCache = await ctx.db.query("locationCache").collect();
-    const cacheMap = new Map(
-      locationCache.map((entry) => [
+    const cacheMap = new Map<string, { latitude: number; longitude: number }>(
+      locationCache.map((entry: LocationCache) => [
         entry.location.toLowerCase(),
         { latitude: entry.latitude, longitude: entry.longitude },
       ])

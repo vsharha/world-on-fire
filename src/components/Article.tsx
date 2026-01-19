@@ -4,10 +4,13 @@ import { ArrowUpRight } from "lucide-react";
 import Truncate from "@/components/Truncate";
 import { formatTimestamp } from "@/lib/utils";
 import Blinker from "@/components/Blinker";
-import type { Article as ArticleType } from "@/types";
+import type { FunctionReturnType } from "convex/server";
+import type { api } from "../../convex/_generated/api";
+
+type Article = FunctionReturnType<typeof api.news.getLatestNews>[number];
 
 interface ArticleProps {
-  article: ArticleType;
+  article: Article;
 }
 
 function Article({ article }: ArticleProps) {
