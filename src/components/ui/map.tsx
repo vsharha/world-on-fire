@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
@@ -12,6 +13,32 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import type { CheckboxItem } from "@radix-ui/react-dropdown-menu"
+import type {
+    Circle,
+    CircleMarker,
+    DivIconOptions,
+    Draw,
+    DrawEvents,
+    DrawMap,
+    DrawOptions,
+    EditToolbar,
+    ErrorEvent,
+    FeatureGroup,
+    LatLngExpression,
+    LayerGroup,
+    Map as LeafletMap,
+    LocateOptions,
+    LocationEvent,
+    Marker,
+    PointExpression,
+    Polygon,
+    Polyline,
+    Popup,
+    Rectangle,
+    TileLayer,
+    Tooltip,
+} from "leaflet"
 import "leaflet-draw/dist/leaflet.draw.css"
 import "leaflet/dist/leaflet.css"
 import {
@@ -31,9 +58,31 @@ import {
 } from "lucide-react"
 import { useTheme } from "next-themes"
 import dynamic from "next/dynamic"
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+    type ReactNode,
+    type Ref,
+} from "react"
 import { renderToString } from "react-dom/server"
-import { useMap, useMapEvents } from "react-leaflet"
+import {
+    useMap,
+    useMapEvents,
+    type CircleMarkerProps,
+    type CircleProps,
+    type LayerGroupProps,
+    type MapContainerProps,
+    type MarkerProps,
+    type PolygonProps,
+    type PolylineProps,
+    type PopupProps,
+    type RectangleProps,
+    type TileLayerProps,
+    type TooltipProps,
+} from "react-leaflet"
 
 const LeafletMapContainer = dynamic(async () => (await import("react-leaflet")).MapContainer, { ssr: false })
 const LeafletTileLayer = dynamic(async () => (await import("react-leaflet")).TileLayer, { ssr: false })
@@ -52,6 +101,9 @@ function Map({
     zoom = 15,
     className,
     ...props
+}: Omit<MapContainerProps, "zoomControl"> & {
+    center: LatLngExpression
+    ref?: Ref<LeafletMap>
 }) {
     return (
         <LeafletMapContainer
@@ -60,13 +112,35 @@ function Map({
             zoomControl={false}
             className={cn("z-50 size-full min-h-96 flex-1 rounded-md [&.leaflet-container]:!bg-background", className)}
             {...props} />
-    );
+    )
 }
 
-const MapLayersContext = createContext(null)
+interface MapTileLayerOption {
+    name: string
+    url: string
+    attribution?: string
+}
+
+interface MapLayerGroupOption
+    extends Pick<React.ComponentProps<typeof CheckboxItem>, "disabled"> {
+    name: string
+}
+
+interface MapLayersContextType {
+    registerTileLayer: (layer: MapTileLayerOption) => void
+    tileLayers: MapTileLayerOption[]
+    selectedTileLayer: string
+    setSelectedTileLayer: (name: string) => void
+    registerLayerGroup: (layer: MapLayerGroupOption) => void
+    layerGroups: MapLayerGroupOption[]
+    activeLayerGroups: string[]
+    setActiveLayerGroups: (names: string[]) => void
+}
+
+const MapLayersContext = createContext<MapLayersContextType | null>(null)
 
 function useMapLayersContext() {
-    return useContext(MapLayersContext);
+    return useContext(MapLayersContext)
 }
 
 function MapTileLayer({
@@ -76,6 +150,11 @@ function MapTileLayer({
     darkUrl,
     darkAttribution,
     ...props
+}: Partial<TileLayerProps> & {
+    name?: string
+    darkUrl?: string
+    darkAttribution?: string
+    ref?: Ref<TileLayer>
 }) {
     const map = useMap()
     if (map.attributionControl) {
@@ -113,14 +192,14 @@ function MapTileLayer({
         return null
     }
 
-    return (<LeafletTileLayer url={resolvedUrl} attribution={resolvedAttribution} {...props} />);
+    return (<LeafletTileLayer url={resolvedUrl} attribution={resolvedAttribution} {...props} />)
 }
 
 function MapLayerGroup({
     name,
     disabled,
     ...props
-}) {
+}: LayerGroupProps & MapLayerGroupOption & { ref?: Ref<LayerGroup> }) {
     const context = useMapLayersContext()
 
     useEffect(() => {
@@ -136,14 +215,14 @@ function MapLayerGroup({
         return null
     }
 
-    return <LeafletLayerGroup {...props} />;
+    return <LeafletLayerGroup {...props} />
 }
 
 function MapFeatureGroup({
     name,
     disabled,
     ...props
-}) {
+}: LayerGroupProps & MapLayerGroupOption & { ref?: Ref<FeatureGroup> }) {
     const context = useMapLayersContext()
 
     useEffect(() => {
@@ -159,21 +238,24 @@ function MapFeatureGroup({
         return null
     }
 
-    return <LeafletFeatureGroup {...props} />;
+    return <LeafletFeatureGroup {...props} />
 }
 
 function MapLayers({
     defaultTileLayer,
     defaultLayerGroups = [],
     ...props
+}: Omit<React.ComponentProps<typeof MapLayersContext.Provider>, "value"> & {
+    defaultTileLayer?: string
+    defaultLayerGroups?: string[]
 }) {
-    const [tileLayers, setTileLayers] = useState([])
-    const [selectedTileLayer, setSelectedTileLayer] = useState(defaultTileLayer || "")
-    const [layerGroups, setLayerGroups] = useState([])
+    const [tileLayers, setTileLayers] = useState<MapTileLayerOption[]>([])
+    const [selectedTileLayer, setSelectedTileLayer] = useState<string>(defaultTileLayer || "")
+    const [layerGroups, setLayerGroups] = useState<MapLayerGroupOption[]>([])
     const [activeLayerGroups, setActiveLayerGroups] =
-        useState(defaultLayerGroups)
+        useState<string[]>(defaultLayerGroups)
 
-    function registerTileLayer(tileLayer) {
+    function registerTileLayer(tileLayer: MapTileLayerOption) {
         setTileLayers((prevTileLayers) => {
             if (prevTileLayers.some((layer) => layer.name === tileLayer.name)) {
                 return prevTileLayers
@@ -182,7 +264,7 @@ function MapLayers({
         })
     }
 
-    function registerLayerGroup(layerGroup) {
+    function registerLayerGroup(layerGroup: MapLayerGroupOption) {
         setLayerGroups((prevLayerGroups) => {
             if (
                 prevLayerGroups.some((group) => group.name === layerGroup.name)
@@ -246,7 +328,7 @@ function MapLayers({
                 setActiveLayerGroups,
             }}
             {...props} />
-    );
+    )
 }
 
 function MapLayersControl({
@@ -254,6 +336,9 @@ function MapLayersControl({
     layerGroupsLabel = "Layers",
     className,
     ...props
+}: React.ComponentProps<"button"> & {
+    tileLayersLabel?: string
+    layerGroupsLabel?: string
 }) {
     const layersContext = useMapLayersContext()
     if (!layersContext) {
@@ -273,7 +358,7 @@ function MapLayersControl({
         return null
     }
 
-    function handleLayerGroupToggle(name, checked) {
+    function handleLayerGroupToggle(name: string, checked: boolean) {
         setActiveLayerGroups(checked
             ? [...activeLayerGroups, name]
             : activeLayerGroups.filter((groupName) => groupName !== name))
@@ -336,7 +421,7 @@ function MapLayersControl({
                 )}
             </DropdownMenuContent>
         </DropdownMenu>
-    );
+    )
 }
 
 function MapMarker({
@@ -346,7 +431,14 @@ function MapMarker({
     popupAnchor,
     tooltipAnchor,
     ...props
-}) {
+}: Omit<MarkerProps, "icon"> &
+    Pick<
+        DivIconOptions,
+        "iconAnchor" | "bgPos" | "popupAnchor" | "tooltipAnchor"
+    > & {
+        icon?: ReactNode
+        ref?: Ref<Marker>
+    }) {
     const { L } = useLeaflet()
     if (!L) return null
 
@@ -362,68 +454,68 @@ function MapMarker({
             })}
             riseOnHover
             {...props} />
-    );
+    )
 }
 
 function MapCircle({
     className,
     ...props
-}) {
+}: CircleProps & { ref?: Ref<Circle> }) {
     return (
         <LeafletCircle
             className={cn("fill-foreground stroke-foreground stroke-2", className)}
             {...props} />
-    );
+    )
 }
 
 function MapCircleMarker({
     className,
     ...props
-}) {
+}: CircleMarkerProps & { ref?: Ref<CircleMarker> }) {
     return (
         <LeafletCircleMarker
             className={cn("fill-foreground stroke-foreground stroke-2", className)}
             {...props} />
-    );
+    )
 }
 
 function MapPolyline({
     className,
     ...props
-}) {
+}: PolylineProps & { ref?: Ref<Polyline> }) {
     return (
         <LeafletPolyline
             className={cn("fill-foreground stroke-foreground stroke-2", className)}
             {...props} />
-    );
+    )
 }
 
 function MapPolygon({
     className,
     ...props
-}) {
+}: PolygonProps & { ref?: Ref<Polygon> }) {
     return (
         <LeafletPolygon
             className={cn("fill-foreground stroke-foreground stroke-2", className)}
             {...props} />
-    );
+    )
 }
 
 function MapRectangle({
     className,
     ...props
-}) {
+}: RectangleProps & { ref?: Ref<Rectangle> }) {
     return (
         <LeafletRectangle
             className={cn("fill-foreground stroke-foreground stroke-2", className)}
             {...props} />
-    );
+    )
 }
 
 function MapPopup({
     className,
     ...props
-}) {
+}: Omit<PopupProps, "content"> & { ref?: Ref<Popup> }) {
     return (
         <LeafletPopup
             className={cn(
@@ -433,7 +525,7 @@ function MapPopup({
                 className
             )}
             {...props} />
-    );
+    )
 }
 
 function MapTooltip({
@@ -442,6 +534,10 @@ function MapTooltip({
     side = "top",
     sideOffset = 15,
     ...props
+}: Omit<TooltipProps, "offset"> & {
+    side?: "top" | "right" | "bottom" | "left"
+    sideOffset?: number
+    ref?: Ref<Tooltip>
 }) {
     const ARROW_POSITION_CLASSES = {
         top: "bottom-0.5 left-1/2 -translate-x-1/2 translate-y-1/2",
@@ -450,10 +546,10 @@ function MapTooltip({
         right: "left-0.5 top-1/2 -translate-x-1/2 -translate-y-1/2",
     }
     const DEFAULT_OFFSET = {
-        top: [0, -sideOffset],
-        bottom: [0, sideOffset],
-        left: [-sideOffset, 0],
-        right: [sideOffset, 0],
+        top: [0, -sideOffset] satisfies PointExpression,
+        bottom: [0, sideOffset] satisfies PointExpression,
+        left: [-sideOffset, 0] satisfies PointExpression,
+        right: [sideOffset, 0] satisfies PointExpression,
     }
 
     return (
@@ -474,13 +570,13 @@ function MapTooltip({
                     ARROW_POSITION_CLASSES[side]
                 )} />
         </LeafletTooltip>
-    );
+    )
 }
 
 function MapZoomControl({
     className,
     ...props
-}) {
+}: React.ComponentProps<"div">) {
     const map = useMap()
     const [zoomLevel, setZoomLevel] = useState(map.getZoom())
 
@@ -519,7 +615,7 @@ function MapZoomControl({
                 <MinusIcon />
             </Button>
         </ButtonGroup>
-    );
+    )
 }
 
 function MapLocatePulseIcon() {
@@ -529,7 +625,7 @@ function MapLocatePulseIcon() {
                 className="bg-primary absolute inline-flex size-full animate-ping rounded-full opacity-75" />
             <div className="bg-primary relative inline-flex size-3 rounded-full" />
         </div>
-    );
+    )
 }
 
 function MapLocateControl({
@@ -538,20 +634,24 @@ function MapLocateControl({
     onLocationFound,
     onLocationError,
     ...props
-}) {
+}: React.ComponentProps<"button"> &
+    Pick<LocateOptions, "watch"> & {
+        onLocationFound?: (location: LocationEvent) => void
+        onLocationError?: (error: ErrorEvent) => void
+    }) {
     const map = useMap()
     const [isLocating, setIsLocating] = useDebounceLoadingState(200)
-    const [position, setPosition] = useState(null)
+    const [position, setPosition] = useState<LatLngExpression | null>(null)
 
     function startLocating() {
         setIsLocating(true)
         map.locate({ setView: true, maxZoom: map.getMaxZoom(), watch })
-        map.on("locationfound", (location) => {
+        map.on("locationfound", (location: LocationEvent) => {
             setPosition(location.latlng)
             setIsLocating(false)
             onLocationFound?.(location)
         })
-        map.on("locationerror", (error) => {
+        map.on("locationerror", (error: ErrorEvent) => {
             setPosition(null)
             setIsLocating(false)
             onLocationError?.(error)
@@ -567,7 +667,7 @@ function MapLocateControl({
     }
 
     useEffect(() => {
-        return () => stopLocating();
+        return () => stopLocating()
     }, [])
 
     return (
@@ -604,28 +704,42 @@ function MapLocateControl({
                 <MapMarker position={position} icon={<MapLocatePulseIcon />} />
             )}
         </>
-    );
+    )
 }
 
-const MapDrawContext = createContext(null)
+type MapDrawShape = "marker" | "polyline" | "circle" | "rectangle" | "polygon"
+type MapDrawAction = "edit" | "delete"
+type MapDrawMode = MapDrawShape | MapDrawAction | null
+
+interface MapDrawContextType {
+    readonly featureGroup: L.FeatureGroup | null
+    activeMode: MapDrawMode
+    setActiveMode: (mode: MapDrawMode) => void
+    readonly editControlRef: React.RefObject<EditToolbar.Edit | null>
+    readonly deleteControlRef: React.RefObject<EditToolbar.Delete | null>
+}
+
+const MapDrawContext = createContext<MapDrawContextType | null>(null)
 
 function useMapDrawContext() {
-    return useContext(MapDrawContext);
+    return useContext(MapDrawContext)
 }
 
 function MapDrawControl({
     className,
     onLayersChange,
     ...props
+}: React.ComponentProps<"div"> & {
+    onLayersChange?: (layers: L.FeatureGroup) => void
 }) {
     const { L, LeafletDraw } = useLeaflet()
     const map = useMap()
-    const featureGroupRef = useRef(null)
-    const editControlRef = useRef(null)
-    const deleteControlRef = useRef(null)
-    const [activeMode, setActiveMode] = useState(null)
+    const featureGroupRef = useRef<L.FeatureGroup | null>(null)
+    const editControlRef = useRef<EditToolbar.Edit | null>(null)
+    const deleteControlRef = useRef<EditToolbar.Delete | null>(null)
+    const [activeMode, setActiveMode] = useState<MapDrawMode>(null)
 
-    function handleDrawCreated(event) {
+    function handleDrawCreated(event: DrawEvents.Created) {
         if (!featureGroupRef.current) return
         const { layer } = event
         featureGroupRef.current.addLayer(layer)
@@ -642,15 +756,15 @@ function MapDrawControl({
     useEffect(() => {
         if (!L || !LeafletDraw) return
 
-        map.on(L.Draw.Event.CREATED, handleDrawCreated)
+        map.on(L.Draw.Event.CREATED, handleDrawCreated as L.LeafletEventHandlerFn)
         map.on(L.Draw.Event.EDITED, handleDrawEditedOrDeleted)
         map.on(L.Draw.Event.DELETED, handleDrawEditedOrDeleted)
 
         return () => {
-            map.off(L.Draw.Event.CREATED, handleDrawCreated)
+            map.off(L.Draw.Event.CREATED, handleDrawCreated as L.LeafletEventHandlerFn)
             map.off(L.Draw.Event.EDITED, handleDrawEditedOrDeleted)
             map.off(L.Draw.Event.DELETED, handleDrawEditedOrDeleted)
-        };
+        }
     }, [L, LeafletDraw, map, onLayersChange])
 
     return (
@@ -668,24 +782,25 @@ function MapDrawControl({
                 className={cn("absolute bottom-1 left-1 z-1000", className)}
                 {...props} />
         </MapDrawContext.Provider>
-    );
+    )
 }
 
-function MapDrawShapeButton(
-    {
-        drawMode,
-        createDrawTool,
-        className,
-        ...props
-    }
-) {
+function MapDrawShapeButton<T extends Draw.Feature>({
+    drawMode,
+    createDrawTool,
+    className,
+    ...props
+}: React.ComponentProps<"button"> & {
+    drawMode: MapDrawShape
+    createDrawTool: (L: typeof import("leaflet"), map: DrawMap) => T
+}) {
     const drawContext = useMapDrawContext()
     if (!drawContext) {
         throw new Error("MapDrawShapeButton must be used within MapDrawControl")
     }
     const { L } = useLeaflet()
     const map = useMap()
-    const controlRef = useRef(null)
+    const controlRef = useRef<T | null>(null)
     const { activeMode, setActiveMode } = drawContext
     const isActive = activeMode === drawMode
 
@@ -695,13 +810,13 @@ function MapDrawShapeButton(
             controlRef.current = null
             return
         }
-        const control = createDrawTool(L, map)
+        const control = createDrawTool(L, map as DrawMap)
         control.enable()
         controlRef.current = control
         return () => {
             control.disable()
             controlRef.current = null
-        };
+        }
     }, [L, map, isActive, createDrawTool])
 
     function handleClick() {
@@ -719,12 +834,12 @@ function MapDrawShapeButton(
             disabled={activeMode === "edit" || activeMode === "delete"}
             onClick={handleClick}
             {...props} />
-    );
+    )
 }
 
 function MapDrawMarker({
     ...props
-}) {
+}: DrawOptions.MarkerOptions) {
     return (
         <MapDrawShapeButton
             drawMode="marker"
@@ -740,7 +855,7 @@ function MapDrawMarker({
             }>
             <MapPinIcon />
         </MapDrawShapeButton>
-    );
+    )
 }
 
 function MapDrawPolyline({
@@ -757,7 +872,7 @@ function MapDrawPolyline({
     },
 
     ...props
-}) {
+}: DrawOptions.PolylineOptions) {
     const mapDrawHandleIcon = useMapDrawHandleIcon()
 
     return (
@@ -779,7 +894,7 @@ function MapDrawPolyline({
             }>
             <WaypointsIcon />
         </MapDrawShapeButton>
-    );
+    )
 }
 
 function MapDrawCircle({
@@ -792,7 +907,7 @@ function MapDrawCircle({
     },
 
     ...props
-}) {
+}: DrawOptions.CircleOptions) {
     return (
         <MapDrawShapeButton
             drawMode="circle"
@@ -805,7 +920,7 @@ function MapDrawCircle({
             }>
             <CircleIcon />
         </MapDrawShapeButton>
-    );
+    )
 }
 
 function MapDrawRectangle({
@@ -818,7 +933,7 @@ function MapDrawRectangle({
     },
 
     ...props
-}) {
+}: DrawOptions.RectangleOptions) {
     return (
         <MapDrawShapeButton
             drawMode="rectangle"
@@ -831,7 +946,7 @@ function MapDrawRectangle({
             }>
             <SquareIcon />
         </MapDrawShapeButton>
-    );
+    )
 }
 
 function MapDrawPolygon({
@@ -846,7 +961,7 @@ function MapDrawPolygon({
     },
 
     ...props
-}) {
+}: DrawOptions.PolygonOptions) {
     const mapDrawHandleIcon = useMapDrawHandleIcon()
 
     return (
@@ -867,18 +982,24 @@ function MapDrawPolygon({
             }>
             <PentagonIcon />
         </MapDrawShapeButton>
-    );
+    )
 }
 
-function MapDrawActionButton(
-    {
-        drawAction,
-        createDrawTool,
-        controlRef,
-        className,
-        ...props
-    }
-) {
+function MapDrawActionButton<T extends EditToolbar.Edit | EditToolbar.Delete>({
+    drawAction,
+    createDrawTool,
+    controlRef,
+    className,
+    ...props
+}: React.ComponentProps<"button"> & {
+    drawAction: MapDrawAction
+    createDrawTool: (
+        L: typeof import("leaflet"),
+        map: DrawMap,
+        featureGroup: L.FeatureGroup
+    ) => T
+    controlRef: React.RefObject<T | null>
+}) {
     const drawContext = useMapDrawContext()
     if (!drawContext)
         throw new Error("MapDrawActionButton must be used within MapDrawControl")
@@ -895,13 +1016,13 @@ function MapDrawActionButton(
             controlRef.current = null
             return
         }
-        const control = createDrawTool(L, map, featureGroup)
+        const control = createDrawTool(L, map as DrawMap, featureGroup)
         control.enable?.()
         controlRef.current = control
         return () => {
             control.disable?.()
             controlRef.current = null
-        };
+        }
     }, [L, map, isActive, featureGroup, createDrawTool])
 
     function handleClick() {
@@ -920,7 +1041,7 @@ function MapDrawActionButton(
             onClick={handleClick}
             className={cn("border", className)}
             {...props} />
-    );
+    )
 }
 
 function MapDrawEdit({
@@ -931,7 +1052,7 @@ function MapDrawEdit({
     },
 
     ...props
-}) {
+}: Omit<EditToolbar.EditHandlerOptions, "featureGroup">) {
     const { L } = useLeaflet()
     const mapDrawHandleIcon = useMapDrawHandleIcon()
     const drawContext = useMapDrawContext()
@@ -977,7 +1098,7 @@ function MapDrawEdit({
             }>
             <PenLineIcon />
         </MapDrawActionButton>
-    );
+    )
 }
 
 function MapDrawDelete() {
@@ -995,13 +1116,13 @@ function MapDrawDelete() {
             }>
             <Trash2Icon />
         </MapDrawActionButton>
-    );
+    )
 }
 
 function MapDrawUndo({
     className,
     ...props
-}) {
+}: React.ComponentProps<"button">) {
     const drawContext = useMapDrawContext()
     if (!drawContext)
         throw new Error("MapDrawUndo must be used within MapDrawControl")
@@ -1035,7 +1156,7 @@ function MapDrawUndo({
             {...props}>
             <Undo2Icon />
         </Button>
-    );
+    )
 }
 
 function useMapDrawHandleIcon() {
@@ -1046,12 +1167,12 @@ function useMapDrawHandleIcon() {
         iconAnchor: [8, 8],
         html: renderToString(<CircleIcon
             className="fill-primary stroke-primary size-4 transition-transform hover:scale-110" />),
-    });
+    })
 }
 
 function useLeaflet() {
-    const [L, setL] = useState(null)
-    const [LeafletDraw, setLeafletDraw] = useState(null)
+    const [L, setL] = useState<typeof import("leaflet") | null>(null)
+    const [LeafletDraw, setLeafletDraw] = useState<typeof import("leaflet-draw") | null>(null)
 
     useEffect(() => {
         if (L && LeafletDraw) return
@@ -1071,7 +1192,7 @@ function useLeaflet() {
 function useDebounceLoadingState(delay = 200) {
     const [isLoading, setIsLoading] = useState(false)
     const [showLoading, setShowLoading] = useState(false)
-    const timeoutRef = useRef(null)
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
     useEffect(() => {
         if (isLoading) {
@@ -1090,10 +1211,10 @@ function useDebounceLoadingState(delay = 200) {
             if (timeoutRef.current) {
                 clearTimeout(timeoutRef.current)
             }
-        };
+        }
     }, [isLoading, delay])
 
-    return [showLoading, setIsLoading];
+    return [showLoading, setIsLoading] as const
 }
 
 export {
